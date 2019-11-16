@@ -1,1 +1,1 @@
-# FOOTBALL-API
+# Image Board API
