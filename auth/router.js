@@ -2,15 +2,14 @@ const { Router } = require('express')
 const { toJWT, toData } = require('./jwt')
 const User = require('../user/model')
 const bcrypt = require('bcrypt')
+const auth = require("../auth/middleware");
 
 
 const router = new Router()
 // creating a user account 
 router.post('/login', (req, res) => {
-  const user = {
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 10)
-  }
+  const email = req.body.email
+  const password = req.body.password
 
   if (!email || !password) {
     res.status(400).send({
@@ -75,5 +74,14 @@ router.get('/secret-endpoint', (req, res) => {
           })
         }
       })
+
+
+router.get('/secret-endpoint', auth, (req, res) => {
+  res.send({
+    message: `Thanks for visiting the secret endpoint ${req.user.email}.`,
+  })
+})
+
+
 
 module.exports = router
